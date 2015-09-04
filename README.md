@@ -1,5 +1,5 @@
-# Kola Starter App
-This is a boilerplate project to start developing with Kola
+# WAG GANYAN TOHL!
+HTML5 game in canvas support.
 
 ## Prerequisites
 * [NodeJS](https://nodejs.org)
