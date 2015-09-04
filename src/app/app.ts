@@ -6,6 +6,7 @@ import signals = require('kola-signals');
 import hooks = require('kola-hooks');
 
 import PIXI = require('pixi.js');
+import cat = require('./cat/app');
 
 export interface Kontext extends kola.Kontext {
     setSignal<T>(name: string, hook?: kola.Hook<T>): kola.SignalHook<T>;
@@ -16,52 +17,38 @@ export interface Kontext extends kola.Kontext {
 
 
 export class App extends kola.App<HTMLElement> {
-    cat;
     renderer;
+    stage;
+    cat:cat.App;
 
     initialize(kontext: Kontext, opts?: HTMLElement): void {
+        kontext.setSignal('stage.render');
 
-        this.renderer = PIXI.autoDetectRenderer(600, 800,{backgroundColor : 0x1099bb});
+        this.renderer = PIXI.autoDetectRenderer(this.opts.clientWidth, this.opts.clientHeight,{backgroundColor : 0x1099bb});
         this.opts.appendChild(this.renderer.view);
 
-// create the root of the scene graph
-        var stage = new PIXI.Container();
+        this.stage = new PIXI.Container();
+        this.stage.getBounds().width = this.opts.clientWidth;
+        this.stage.getBounds().height = this.opts.clientHeight;
 
-// create a texture from an image path
-        var texture = PIXI.Texture.fromImage('images/cat.png');
+        console.log("opts>" + this.opts.clientWidth);
+        console.log(this.stage.getBounds().width);
 
-// create a new Sprite using the texture
-        this.cat = new PIXI.Sprite(texture);
+        for (var i=0 ; i < 400; i++){
+            var kitten = new cat.App(this);
+            kitten.start({container:this.stage});
+        }
 
-// center the sprite's anchor point
-        this.cat.anchor.x = 0.5;
-        this.cat.anchor.y = 0.5;
-
-        this.cat.scale.x = 0.3;
-        this.cat.scale.y = 0.3;
-
-// move the sprite to the center of the screen
-        this.cat.position.x = 200;
-        this.cat.position.y = 150;
-
-        stage.addChild(this.cat);
-
-// start animating
-        requestAnimationFrame(this.catMove.bind(this));
-
+        requestAnimationFrame(this.animate.bind(this));
     }
 
-    catMove(timestamp):void {
-        requestAnimationFrame(this.catMove.bind(this));
-        // just for fun, let's rotate mr rabbit a little
-        this.cat.rotation += 0.1;
-
-        // render the container
-        this.renderer.render(this.cat);
+    animate():void {
+        requestAnimationFrame(this.animate.bind(this));
+        this.renderer.render(this.stage);
+        this.kontext.getSignal("stage.render").dispatch();
     }
 
     onStart(): void {
-
     }
 
 

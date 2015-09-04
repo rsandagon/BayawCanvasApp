@@ -60,6 +60,7 @@ gulp.task('run', ['bundle'], function() {
     gulp.src('bundle')
         .pipe(webserver({
             "livereload": true,
+            host:"0.0.0.0",
             port: 8000
         }))
 })
