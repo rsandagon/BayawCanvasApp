@@ -5,6 +5,7 @@ import kola = require('kola');
 import signals = require('kola-signals');
 import hooks = require('kola-hooks');
 import PIXI = require('pixi.js');
+//import TweenLite = require('TimelineLite');
 
 export interface Kontext extends kola.Kontext {
     setSignal<T>(name: string, hook?: kola.Hook<T>): kola.SignalHook<T>;
@@ -32,10 +33,24 @@ export class App extends kola.App<{container:PIXI.Container}> {
         this.sprite.position.x = Math.random() * this.container.getBounds().width;
         this.sprite.position.y = Math.random() * this.container.getBounds().height;
 
-        console.log(this.container.width);
+        this.sprite.interactive = true;
+        this.sprite.buttonMode = true;
+        this.sprite.on('mousedown', this.onClick);
 
         this.container.addChild(this.sprite);
         this.listeners.push(this.kontext.getSignal('stage.render').listen(this.updateView, this));
+        this.listeners.push(this.kontext.getSignal('stage.clicked').listen(this.followSprite, this));
+
+        //TweenLite.to(this.sprite.position,1, {x:100, y:100, ease:Cubic.easeOut});
+    }
+
+    onClick(mouseData):void{
+        console.log("clicked >" + mouseData);
+    }
+
+    followSprite(payload:any):void{
+        console.log(payload);
+        //TweenLite.to(this.sprite.position,1, {x:payload.x, y:payload.y, ease:Cubic.easeOut});
     }
 
     updateView():void{
@@ -43,6 +58,7 @@ export class App extends kola.App<{container:PIXI.Container}> {
     }
 
     onStop(): void {
+        this.container.removeChild(this.sprite);
         this.listeners.forEach((listener: signals.Listener<any>) => {listener.unlisten()});
     }
 }

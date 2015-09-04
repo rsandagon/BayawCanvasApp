@@ -15,6 +15,7 @@
   "devDependencies": {
     "browserify": "^9.0.3",
     "del": "^1.1.1",
+    "gsap": "^1.17.0",
     "gulp": "^3.8.11",
     "gulp-if": "^1.2.5",
     "gulp-sourcemaps": "^1.5.1",

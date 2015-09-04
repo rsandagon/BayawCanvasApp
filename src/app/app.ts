@@ -23,6 +23,7 @@ export class App extends kola.App<HTMLElement> {
 
     initialize(kontext: Kontext, opts?: HTMLElement): void {
         kontext.setSignal('stage.render');
+        kontext.setSignal('stage.clicked');
 
         this.renderer = PIXI.autoDetectRenderer(this.opts.clientWidth, this.opts.clientHeight,{backgroundColor : 0x1099bb});
         this.opts.appendChild(this.renderer.view);
@@ -31,13 +32,8 @@ export class App extends kola.App<HTMLElement> {
         this.stage.getBounds().width = this.opts.clientWidth;
         this.stage.getBounds().height = this.opts.clientHeight;
 
-        console.log("opts>" + this.opts.clientWidth);
-        console.log(this.stage.getBounds().width);
-
-        for (var i=0 ; i < 400; i++){
-            var kitten = new cat.App(this);
-            kitten.start({container:this.stage});
-        }
+        var kitten = new cat.App(this);
+        kitten.start({container:this.stage});
 
         requestAnimationFrame(this.animate.bind(this));
     }
