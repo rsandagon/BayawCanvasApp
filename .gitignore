@@ -1,0 +1,12 @@
+.idea
+.DS_Store
+/node
+/node_modules
+/node_modules_internal
+node_modules_internal_dev
+npm-debug.log
+/target
+/build
+/localize
+/bin-debug
+/bundle
