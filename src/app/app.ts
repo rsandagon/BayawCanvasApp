@@ -1,5 +1,5 @@
 /**
- * Created by jcabresos on 3/27/15.
+ * Created by rsandagon on 3/27/15.
  */
 import kola = require('kola');
 import signals = require('kola-signals');
@@ -7,6 +7,7 @@ import hooks = require('kola-hooks');
 
 import PIXI = require('pixi.js');
 import cat = require('./cat/app');
+import models = require('./models');
 
 export interface Kontext extends kola.Kontext {
     setSignal<T>(name: string, hook?: kola.Hook<T>): kola.SignalHook<T>;
@@ -20,22 +21,27 @@ export class App extends kola.App<HTMLElement> {
     renderer;
     stage;
     cat:cat.App;
+    requestId;
 
     initialize(kontext: Kontext, opts?: HTMLElement): void {
         kontext.setSignal('stage.render');
         kontext.setSignal('stage.clicked');
+        kontext.setInstance<models.GameModel>('game.model', () => {
+            return new models.GameModel();
+        }).asSingleton();
 
-        this.renderer = PIXI.autoDetectRenderer(this.opts.clientWidth, this.opts.clientHeight,{backgroundColor : 0x1099bb});
+        var gameModel : models.GameModel = <models.GameModel> kontext.getInstance('game.model');
+
+        this.renderer = PIXI.autoDetectRenderer(gameModel.width, gameModel.height);
+        this.renderer.view.className = "renderer";
         this.opts.appendChild(this.renderer.view);
 
         this.stage = new PIXI.Container();
-        this.stage.getBounds().width = this.opts.clientWidth;
-        this.stage.getBounds().height = this.opts.clientHeight;
+        this.stage.getBounds().width = gameModel.width;
+        this.stage.getBounds().height = gameModel.height;
 
         var kitten = new cat.App(this);
         kitten.start({container:this.stage});
-
-        requestAnimationFrame(this.animate.bind(this));
     }
 
     animate():void {
@@ -45,9 +51,13 @@ export class App extends kola.App<HTMLElement> {
     }
 
     onStart(): void {
+        this.requestId = requestAnimationFrame(this.animate.bind(this));
     }
 
-
     onStop(): void {
+        if(this.requestId){
+            cancelAnimationFrame(this.requestId);
+            this.requestId = undefined;
+        }
     }
 }

@@ -1,11 +1,10 @@
 /**
- * Created by jcabresos on 3/27/15.
+ * Created by rsandagon on 3/27/15.
  */
 import kola = require('kola');
 import signals = require('kola-signals');
 import hooks = require('kola-hooks');
 import PIXI = require('pixi.js');
-//import TweenLite = require('TimelineLite');
 
 export interface Kontext extends kola.Kontext {
     setSignal<T>(name: string, hook?: kola.Hook<T>): kola.SignalHook<T>;
@@ -40,8 +39,6 @@ export class App extends kola.App<{container:PIXI.Container}> {
         this.container.addChild(this.sprite);
         this.listeners.push(this.kontext.getSignal('stage.render').listen(this.updateView, this));
         this.listeners.push(this.kontext.getSignal('stage.clicked').listen(this.followSprite, this));
-
-        //TweenLite.to(this.sprite.position,1, {x:100, y:100, ease:Cubic.easeOut});
     }
 
     onClick(mouseData):void{
@@ -50,7 +47,6 @@ export class App extends kola.App<{container:PIXI.Container}> {
 
     followSprite(payload:any):void{
         console.log(payload);
-        //TweenLite.to(this.sprite.position,1, {x:payload.x, y:payload.y, ease:Cubic.easeOut});
     }
 
     updateView():void{

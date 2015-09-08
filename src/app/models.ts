@@ -1,42 +1,24 @@
 /**
- * Created by jcabresos on 3/27/15.
+ * Created by randagon 9/9/2015
  */
+
 import signals = require('kola-signals');
 
-export interface Greeting {
-    message: string;
-    locale: string;
-}
+export class GameModel {
 
-export class Greeter {
-
-    greetings: Greeting[];
-    onGreeting: signals.Dispatcher<Greeting>;
-
-    private currentGreeting: Greeting;
+    width : number;
+    height: number;
+    currentState: string;
 
     constructor() {
-
-        this.greetings = [
-            {"locale": "en", "message": "Hello Kola!"},
-            {"locale": "es", "message": "Hola Kola!"},
-            {"locale": "fr", "message": "Bonjour Kola!"},
-            {"locale": "cn", "message": "您好科拉"},
-            {"locale": "kr", "message": "안녕하세요 콜라!"},
-            {"locale": "jp", "message": "こんにちはコラ"},
-            {"locale": "ph", "message": "Mabuhay Kola!"}
-        ]
-
-        this.onGreeting = new signals.Dispatcher();
-
+        this.width = 600;
+        this.height = 450;
+        this.currentState = GameState.INTRO;
     }
+}
 
-    setCurrentGreeting(value: Greeting): void {
-        this.currentGreeting = value;
-        this.onGreeting.dispatch(value);
-    }
-
-    getCurrentGreeting(): Greeting {
-        return this.currentGreeting;
-    }
+export class GameState{
+    static INTRO : string = "intro";
+    static PLAYING : string = "playing";
+    static PAUSED : string = "paused";
 }
