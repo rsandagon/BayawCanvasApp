@@ -7,6 +7,7 @@ import hooks = require('kola-hooks');
 
 import PIXI = require('pixi.js');
 import cat = require('./cat/app');
+import background = require('./background/app');
 import models = require('./models');
 
 export interface Kontext extends kola.Kontext {
@@ -20,7 +21,6 @@ export interface Kontext extends kola.Kontext {
 export class App extends kola.App<HTMLElement> {
     renderer;
     stage;
-    cat:cat.App;
     requestId;
 
     initialize(kontext: Kontext, opts?: HTMLElement): void {
@@ -41,7 +41,10 @@ export class App extends kola.App<HTMLElement> {
         this.stage.getBounds().height = gameModel.height;
 
         var kitten = new cat.App(this);
-        kitten.start({container:this.stage});
+        var bg = new background.App(this);
+
+        bg.start({container:this.stage});
+        //kitten.start({container:this.stage});
     }
 
     animate():void {

@@ -8,11 +8,13 @@ export class GameModel {
 
     width : number;
     height: number;
+    foregroundHeight : number;
     currentState: string;
 
     constructor() {
         this.width = 600;
         this.height = 450;
+        this.foregroundHeight = 180;
         this.currentState = GameState.INTRO;
     }
 }
