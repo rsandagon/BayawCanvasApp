@@ -43,6 +43,7 @@ export class App extends kola.App<{container:PIXI.Container}> {
         this.sprite.interactive = true;
         this.sprite.buttonMode = true;
         this.sprite.on('mousedown', this.onClick.bind(this));
+        this.sprite.on('touchend', this.onClick.bind(this));
 
         this.container.addChild(this.sprite);
         this.listeners.push(this.kontext.getSignal('stage.render').listen(this.updateView, this));
