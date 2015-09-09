@@ -16,7 +16,7 @@ export class GameModel {
     constructor() {
         this.width = 600;
         this.height = 450;
-        this.foregroundHeight = 180;
+        this.foregroundHeight = 220;
         this.setCurrentState(GameState.INTRO);
     }
 
@@ -35,7 +35,7 @@ export class GameState{
 }
 
 export class GameSpeed{
-    static BG_SPEED : number = 0.1;
-    static FG_SPEED : number = 0.5;
-    static GROUND_SPEED : number = 0.6;
+    static BG_SPEED : number = 0.5;
+    static FG_SPEED : number = 0.8;
+    static GROUND_SPEED : number = 0.9;
 }

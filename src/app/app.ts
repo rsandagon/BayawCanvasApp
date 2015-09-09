@@ -6,8 +6,11 @@ import signals = require('kola-signals');
 import hooks = require('kola-hooks');
 
 import PIXI = require('pixi.js');
+
 import introApp = require('./introView/app');
 import backgroundApp = require('./background/app');
+import bayawApp = require('./bayaw/app');
+
 import models = require('./models');
 
 export interface Kontext extends kola.Kontext {
@@ -51,13 +54,25 @@ export class App extends kola.App<HTMLElement> {
     }
 
     onStart(): void {
+
         var intro = new introApp.App(this);
         var bg = new backgroundApp.App(this);
+        var bayaw = new bayawApp.App(this);
 
         bg.start({container:this.stage});
         intro.start({container:this.stage});
+        bayaw.start({ container: this.stage});
+
+        this.stage.interactive = true;
+        this.stage.buttonMode = true;
+        this.stage.on('mousedown', this.onClick.bind(this));
+        this.stage.on('touchend', this.onClick.bind(this));
 
         this.requestId = requestAnimationFrame(this.animate.bind(this));
+    }
+
+    onClick(mouseData): void {
+        this.kontext.getSignal('stage.clicked').dispatch({ payload: mouseData.data.global});
     }
 
     onStop(): void {
