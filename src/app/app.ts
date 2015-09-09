@@ -6,8 +6,8 @@ import signals = require('kola-signals');
 import hooks = require('kola-hooks');
 
 import PIXI = require('pixi.js');
-import cat = require('./cat/app');
-import background = require('./background/app');
+import introApp = require('./introView/app');
+import backgroundApp = require('./background/app');
 import models = require('./models');
 
 export interface Kontext extends kola.Kontext {
@@ -24,8 +24,11 @@ export class App extends kola.App<HTMLElement> {
     requestId;
 
     initialize(kontext: Kontext, opts?: HTMLElement): void {
+        //  Signals
         kontext.setSignal('stage.render');
         kontext.setSignal('stage.clicked');
+
+        //  Singleton models
         kontext.setInstance<models.GameModel>('game.model', () => {
             return new models.GameModel();
         }).asSingleton();
@@ -39,12 +42,6 @@ export class App extends kola.App<HTMLElement> {
         this.stage = new PIXI.Container();
         this.stage.getBounds().width = gameModel.width;
         this.stage.getBounds().height = gameModel.height;
-
-        var kitten = new cat.App(this);
-        var bg = new background.App(this);
-
-        bg.start({container:this.stage});
-        //kitten.start({container:this.stage});
     }
 
     animate():void {
@@ -54,6 +51,12 @@ export class App extends kola.App<HTMLElement> {
     }
 
     onStart(): void {
+        var intro = new introApp.App(this);
+        var bg = new backgroundApp.App(this);
+
+        bg.start({container:this.stage});
+        intro.start({container:this.stage});
+
         this.requestId = requestAnimationFrame(this.animate.bind(this));
     }
 

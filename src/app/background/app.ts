@@ -43,8 +43,8 @@ export class App extends kola.App<{container:PIXI.Container}> {
     }
 
     updateView():void{
-        this.bg.tilePosition.x -= 0.1;
-        this.fg.tilePosition.x -= 0.5;
+        this.bg.tilePosition.x -= models.GameSpeed.BG_SPEED;
+        this.fg.tilePosition.x -= models.GameSpeed.FG_SPEED;
     }
 
     onStop(): void {
