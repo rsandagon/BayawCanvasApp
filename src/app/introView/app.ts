@@ -20,6 +20,7 @@ export class App extends kola.App<{container:PIXI.Container}> {
     listeners: signals.Listener<any>[] = [];
     container:PIXI.Container;
     gameModel:models.GameModel;
+    stateChangeListener:signals.Listener<string>;
 
     onStart(): void {
         var texture = PIXI.Texture.fromImage('images/intro.png');
@@ -37,18 +38,32 @@ export class App extends kola.App<{container:PIXI.Container}> {
         this.sprite.scale.x = 0;
         this.sprite.scale.y = 0;
 
-        TweenLite.to(this.sprite.scale,2,{x:1,y:1});
+        TweenLite.to(this.sprite.scale,1,{x:1,y:1});
 
         this.sprite.interactive = true;
         this.sprite.buttonMode = true;
-        this.sprite.on('mousedown', this.onClick);
+        this.sprite.on('mousedown', this.onClick.bind(this));
 
         this.container.addChild(this.sprite);
         this.listeners.push(this.kontext.getSignal('stage.render').listen(this.updateView, this));
+        this.stateChangeListener = this.gameModel.onStateChange.listen(this.stateChanged, this);
     }
 
     onClick(mouseData):void{
         this.gameModel.setCurrentState(models.GameState.PLAYING);
+    }
+
+    stateChanged(state):void{
+        switch(state){
+            case models.GameState.PLAYING:
+                TweenLite.to(this.sprite.scale,1,{x:0,y:0});
+                break;
+            case models.GameState.INTRO:
+                TweenLite.to(this.sprite.scale,2,{x:1,y:1});
+                break;
+            default:
+                break;
+        }
     }
 
     updateView():void{

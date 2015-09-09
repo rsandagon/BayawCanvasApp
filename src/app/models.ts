@@ -20,7 +20,7 @@ export class GameModel {
         this.setCurrentState(GameState.INTRO);
     }
 
-    setCurrentState(value){
+    setCurrentState(value:string){
         console.log("state >" + value);
 
         this.currentState = value;
