@@ -62,16 +62,24 @@ export class App extends kola.App<{container:PIXI.Container}> {
     }
 
     onStageClicked(data):void{
-        console.log(data);
         var payload = data.payload;
+        
+        var goDown = function(){
+            tweenLite.to(this.sprite.position, 1, { delay: 1, y: this.gameModel.floorHeight + 100, onComplete: walk.bind(this) });
+        }
+
+        var walk = function(){
+            this.sprite.textures = this.walkTextures;
+        }
+
         if (this.gameModel.currentState == models.GameState.PLAYING){
-            if (payload.y < 266) {
+            if (payload.y < this.gameModel.floorHeight) {
                 this.sprite.textures = this.jumpTextures;
+                tweenLite.to(this.sprite.position, 1, { x: payload.x, y: this.gameModel.floorHeight - 150, onComplete: goDown.bind(this) });
             }else{
                 this.sprite.textures = this.walkTextures;
+                tweenLite.to(this.sprite.position, 1, { x: payload.x, y: payload.y });
             }
-
-            tweenLite.to(this.sprite.position, 1, { x: payload.x, y: payload.y });
 
         }else{
             this.sprite.position.x = 100;

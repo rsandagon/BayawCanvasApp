@@ -17,50 +17,52 @@ export interface Kontext extends kola.Kontext {
 
 export class App extends kola.App<{container:PIXI.Container}> {
     bg;
-    fg;
-    gg;
     listeners: signals.Listener<any>[] = [];
     container:PIXI.Container;
     gameModel: models.GameModel;
+    texture1: PIXI.Texture;
+    texture2: PIXI.Texture;
 
     onStart(): void {
         this.gameModel = <models.GameModel> this.kontext.getInstance('game.model');
 
         this.container = this.opts.container;
-        var texture1 = PIXI.Texture.fromImage('images/background.png');
-        var texture2 = PIXI.Texture.fromImage('images/foreground.png');
-        var texture3 = PIXI.Texture.fromImage('images/ground.png');
+        
+        this.texture1 = PIXI.Texture.fromImage('images/poddle_1.png');
+        this.texture2 = PIXI.Texture.fromImage('images/poddle_2.png');
 
-        this.bg = new PIXI.extras.TilingSprite(texture1, this.gameModel.width, this.gameModel.height);
-        this.fg = new PIXI.extras.TilingSprite(texture2, this.gameModel.width, this.gameModel.foregroundHeight);
-        this.gg = new PIXI.extras.TilingSprite(texture3, this.gameModel.width, this.gameModel.groundHeight);
+        this.bg = new PIXI.Sprite(this.texture1);
 
-        this.bg.position.x = 0;
-        this.bg.position.y = 0;
-
-        this.fg.position.x = 0;
-        this.fg.position.y = 50;
-
-        this.gg.position.x = 0;
-        this.gg.position.y = 120;
+        this.bg.position.x = this.gameModel.width + 50;
+        this.bg.position.y = 300;
 
         this.container.addChild(this.bg);
-        this.container.addChild(this.fg);
-        this.container.addChild(this.gg);
         this.listeners.push(this.kontext.getSignal('stage.render').listen(this.updateView, this));
     }
 
     updateView():void{
         if (this.gameModel.currentState == models.GameState.PLAYING) {
-            this.bg.tilePosition.x -= models.GameSpeed.BG_SPEED;
-            this.fg.tilePosition.x -= models.GameSpeed.FG_SPEED;
-            this.gg.tilePosition.x -= models.GameSpeed.GROUND_SPEED;
+            this.bg.position.x -= models.GameSpeed.GROUND_SPEED;
+
+            if (this.bg.position.x < -150){
+                this.bg.setTexture(this.texture2);
+                this.bg.position.x = this.gameModel.width + 50;
+            }
+
+
+
         }
+    }
+
+    isIntersecting(r1, r2):boolean {
+        return !(r2.x > (r1.x + r1.width) ||
+            (r2.x + r2.width) < r1.x ||
+            r2.y > (r1.y + r1.height) ||
+            (r2.y + r2.height) < r1.y);
     }
 
     onStop(): void {
         this.container.removeChild(this.bg);
-        this.container.removeChild(this.fg);
         this.listeners.forEach((listener: signals.Listener<any>) => {listener.unlisten()});
     }
 }

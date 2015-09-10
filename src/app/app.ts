@@ -10,6 +10,7 @@ import PIXI = require('pixi.js');
 import introApp = require('./introView/app');
 import backgroundApp = require('./background/app');
 import bayawApp = require('./bayaw/app');
+import enemyApp = require('./enemy/app');
 
 import models = require('./models');
 
@@ -58,10 +59,13 @@ export class App extends kola.App<HTMLElement> {
         var intro = new introApp.App(this);
         var bg = new backgroundApp.App(this);
         var bayaw = new bayawApp.App(this);
+        var enemy = new enemyApp.App(this);
 
         bg.start({container:this.stage});
         intro.start({container:this.stage});
+        enemy.start({ container: this.stage });
         bayaw.start({ container: this.stage});
+        
 
         this.stage.interactive = true;
         this.stage.buttonMode = true;

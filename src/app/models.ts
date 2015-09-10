@@ -9,7 +9,9 @@ export class GameModel {
     width : number;
     height: number;
     foregroundHeight : number;
+    groundHeight: number;
     currentState: string;
+    floorHeight: number;
 
     onStateChange: signals.Dispatcher<string> = new signals.Dispatcher();
 
@@ -17,6 +19,8 @@ export class GameModel {
         this.width = 600;
         this.height = 450;
         this.foregroundHeight = 220;
+        this.groundHeight = 350;
+        this.floorHeight = 250;
         this.setCurrentState(GameState.INTRO);
     }
 
