@@ -336,3 +336,7 @@ declare var RaphaelPlugin:RaphaelPlugin;
 declare var RoundPropsPlugin:RoundPropsPlugin;
 declare var ScrollToPlugin:ScrollToPlugin;
 declare var TweenPlugin:TweenPlugin;
+
+declare module 'gsap' {
+    export = TweenLite;
+}

@@ -10,7 +10,8 @@
     "kola": "^0.1.2",
     "kola-hooks": "^0.0.5",
     "kola-signals": "^0.1.1",
-    "superagent": "^1.2.0"
+    "superagent": "^1.2.0",
+    "gsap": "^1.18.0"
   },
   "devDependencies": {
     "browserify": "^9.0.3",
