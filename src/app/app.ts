@@ -11,6 +11,7 @@ import introApp = require('./introView/app');
 import backgroundApp = require('./background/app');
 import bayawApp = require('./bayaw/app');
 import enemyApp = require('./enemy/app');
+import bboxApp = require('./ballotBoxes/app');
 
 import models = require('./models');
 import gsap = require('gsap');
@@ -40,6 +41,10 @@ export class App extends kola.App<HTMLElement> {
             return new models.GameModel();
         }).asSingleton();
 
+        kontext.setInstance<bayawApp.App>('player.bayaw', () => {
+            return new bayawApp.App(this);
+        }).asSingleton();
+
         var gameModel : models.GameModel = <models.GameModel> kontext.getInstance('game.model');
 
         this.renderer = PIXI.autoDetectRenderer(gameModel.width, gameModel.height);
@@ -61,14 +66,15 @@ export class App extends kola.App<HTMLElement> {
 
         var intro = new introApp.App(this);
         var bg = new backgroundApp.App(this);
-        var bayaw = new bayawApp.App(this);
+        var bayaw = <bayawApp.App>this.kontext.getInstance('player.bayaw');
         var enemy = new enemyApp.App(this);
+        var bbox = new bboxApp.App(this);
 
         bg.start({container:this.stage});
         intro.start({container:this.stage});
         enemy.start({ container: this.stage });
-        bayaw.start({ container: this.stage});
-        
+        bbox.start({ container: this.stage });
+        bayaw.start({ container: this.stage });
 
         this.stage.interactive = true;
         this.stage.buttonMode = true;
