@@ -6,6 +6,7 @@ import signals = require('kola-signals');
 import hooks = require('kola-hooks');
 import PIXI = require('pixi.js');
 import models = require('../models');
+import gsap = require('gsap');
 
 export interface Kontext extends kola.Kontext {
     setSignal<T>(name: string, hook?: kola.Hook<T>): kola.SignalHook<T>;
@@ -23,6 +24,8 @@ export class App extends kola.App<{container:PIXI.Container}> {
     stateChangeListener:signals.Listener<string>;
 
     onStart(): void {
+        var gsapGlobal = gsap;
+
         var texture = PIXI.Texture.fromImage('images/intro.png');
         this.gameModel = <models.GameModel> this.kontext.getInstance('game.model');
 
@@ -38,7 +41,8 @@ export class App extends kola.App<{container:PIXI.Container}> {
         this.sprite.scale.x = 0;
         this.sprite.scale.y = 0;
 
-        TweenLite.to(this.sprite.scale,1,{x:1,y:1});
+        TweenLite.to(this.sprite.scale,1,{bezier:[{x:1.3, y:.8}, {x:0.4, y:0.2}, {x:1, y:1}], ease:Power1.easeInOut});;
+
 
         this.sprite.interactive = true;
         this.sprite.buttonMode = true;
@@ -51,7 +55,7 @@ export class App extends kola.App<{container:PIXI.Container}> {
     }
 
     onClick(mouseData):void{
-       TweenLite.to(this.sprite.scale, 1, { x: 0, y: 0 , onComplete: this.introDone.bind(this)});
+       TweenMax.to(this.sprite.scale, 0.5, { x: 0, y: 0 , onComplete: this.introDone.bind(this)});
     }
 
     introDone():void{

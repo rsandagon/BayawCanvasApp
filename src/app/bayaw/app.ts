@@ -6,7 +6,7 @@ import signals = require('kola-signals');
 import hooks = require('kola-hooks');
 import PIXI = require('pixi.js');
 import models = require('../models');
-import tweenLite = require('gsap');
+import gsap = require('gsap');
 
 export interface Kontext extends kola.Kontext {
     setSignal<T>(name: string, hook?: kola.Hook<T>): kola.SignalHook<T>;
@@ -65,7 +65,7 @@ export class App extends kola.App<{container:PIXI.Container}> {
         var payload = data.payload;
         
         var goDown = function(){
-            tweenLite.to(this.sprite.position, 1, { delay: 1, y: this.gameModel.floorHeight + 100, onComplete: walk.bind(this) });
+            //TweenLite.to(this.sprite.position, 1, { delay: 1, y: this.gameModel.floorHeight + 100, onComplete: walk.bind(this) });
         }
 
         var walk = function(){
@@ -75,10 +75,10 @@ export class App extends kola.App<{container:PIXI.Container}> {
         if (this.gameModel.currentState == models.GameState.PLAYING){
             if (payload.y < this.gameModel.floorHeight) {
                 this.sprite.textures = this.jumpTextures;
-                tweenLite.to(this.sprite.position, 1, { x: payload.x, y: this.gameModel.floorHeight - 150, onComplete: goDown.bind(this) });
+                //TweenLite.to(this.sprite.position, 1, { x: payload.x, y: this.gameModel.floorHeight - 150, onComplete: goDown.bind(this) });
             }else{
                 this.sprite.textures = this.walkTextures;
-                tweenLite.to(this.sprite.position, 1, { x: payload.x, y: payload.y });
+                //TweenMax.to(this.sprite.position, 1, { x: payload.x, y: payload.y });
             }
 
         }else{
@@ -91,11 +91,11 @@ export class App extends kola.App<{container:PIXI.Container}> {
         switch(state){
             case models.GameState.PLAYING:
                 this.sprite.play();
-                tweenLite.to(this.sprite.scale, 1, { x: 1.2, y: 1.2 });    
+                //TweenLite.to(this.sprite.scale, 1, { x: 1.2, y: 1.2 });
                 break;
             case models.GameState.INTRO:
                 this.sprite.stop();
-                tweenLite.to(this.sprite.scale, 1, { x: 0, y: 0 });
+                //TweenMax.to(this.sprite.scale, 1, { x: 0, y: 0 });
                 break;
             default:
                 break;
