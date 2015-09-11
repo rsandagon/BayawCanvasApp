@@ -18,7 +18,9 @@ export interface Kontext extends kola.Kontext {
 export class App extends kola.App<{container:PIXI.Container}> {
     bg;
     fg;
+    mrt;
     gg;
+
     listeners: signals.Listener<any>[] = [];
     container:PIXI.Container;
     gameModel: models.GameModel;
@@ -30,10 +32,12 @@ export class App extends kola.App<{container:PIXI.Container}> {
         var texture1 = PIXI.Texture.fromImage('images/background.png');
         var texture2 = PIXI.Texture.fromImage('images/foreground.png');
         var texture3 = PIXI.Texture.fromImage('images/ground.png');
+        var texture4 = PIXI.Texture.fromImage('images/mrt.png');
 
         this.bg = new PIXI.extras.TilingSprite(texture1, this.gameModel.width, this.gameModel.height);
         this.fg = new PIXI.extras.TilingSprite(texture2, this.gameModel.width, this.gameModel.foregroundHeight);
         this.gg = new PIXI.extras.TilingSprite(texture3, this.gameModel.width, this.gameModel.groundHeight);
+        this.mrt = new PIXI.Sprite(texture4);
 
         this.bg.position.x = 0;
         this.bg.position.y = 0;
@@ -44,9 +48,16 @@ export class App extends kola.App<{container:PIXI.Container}> {
         this.gg.position.x = 0;
         this.gg.position.y = 120;
 
+        this.mrt.position.x = 2000;
+        this.mrt.position.y = 90;
+
         this.container.addChild(this.bg);
         this.container.addChild(this.fg);
+        this.container.addChild(this.mrt);
         this.container.addChild(this.gg);
+
+        TweenMax.to(this.mrt.position, 8, { delay: 3, x: -10000, repeat:-1});
+
         this.listeners.push(this.kontext.getSignal('stage.render').listen(this.updateView, this));
     }
 

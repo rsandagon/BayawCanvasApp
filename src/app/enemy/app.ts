@@ -16,41 +16,39 @@ export interface Kontext extends kola.Kontext {
 
 
 export class App extends kola.App<{container:PIXI.Container}> {
-    bg;
+    floodMC;
     listeners: signals.Listener<any>[] = [];
     container:PIXI.Container;
     gameModel: models.GameModel;
-    texture1: PIXI.Texture;
-    texture2: PIXI.Texture;
+    floodTextures = [];
 
     onStart(): void {
         this.gameModel = <models.GameModel> this.kontext.getInstance('game.model');
 
         this.container = this.opts.container;
         
-        this.texture1 = PIXI.Texture.fromImage('images/poddle_1.png');
-        this.texture2 = PIXI.Texture.fromImage('images/poddle_2.png');
+        var texture1 = PIXI.Texture.fromImage('images/poddle_1.png');
+        var texture2 = PIXI.Texture.fromImage('images/poddle_2.png');
+        this.floodTextures = [texture1,texture2];
 
-        this.bg = new PIXI.Sprite(this.texture1);
+        this.floodMC = new PIXI.extras.MovieClip(this.floodTextures);
+        this.floodMC.animationSpeed = 0.05;
+        this.floodMC.play();
 
-        this.bg.position.x = this.gameModel.width + 50;
-        this.bg.position.y = 300;
+        this.floodMC.position.x = this.gameModel.width + 50;
+        this.floodMC.position.y = 300;
 
-        this.container.addChild(this.bg);
+        this.container.addChild(this.floodMC);
         this.listeners.push(this.kontext.getSignal('stage.render').listen(this.updateView, this));
     }
 
     updateView():void{
         if (this.gameModel.currentState == models.GameState.PLAYING) {
-            this.bg.position.x -= models.GameSpeed.GROUND_SPEED;
+            this.floodMC.position.x -= models.GameSpeed.GROUND_SPEED;
 
-            if (this.bg.position.x < -150){
-                this.bg.setTexture(this.texture2);
-                this.bg.position.x = this.gameModel.width + 50;
+            if (this.floodMC.position.x < -150){
+               this.floodMC.position.x = this.gameModel.width + 50;
             }
-
-
-
         }
     }
 
@@ -62,7 +60,7 @@ export class App extends kola.App<{container:PIXI.Container}> {
     }
 
     onStop(): void {
-        this.container.removeChild(this.bg);
+        this.container.removeChild(this.floodMC);
         this.listeners.forEach((listener: signals.Listener<any>) => {listener.unlisten()});
     }
 }

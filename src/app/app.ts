@@ -13,6 +13,7 @@ import bayawApp = require('./bayaw/app');
 import enemyApp = require('./enemy/app');
 
 import models = require('./models');
+import gsap = require('gsap');
 
 export interface Kontext extends kola.Kontext {
     setSignal<T>(name: string, hook?: kola.Hook<T>): kola.SignalHook<T>;
@@ -28,6 +29,8 @@ export class App extends kola.App<HTMLElement> {
     requestId;
 
     initialize(kontext: Kontext, opts?: HTMLElement): void {
+        var greenSock = gsap;
+
         //  Signals
         kontext.setSignal('stage.render');
         kontext.setSignal('stage.clicked');

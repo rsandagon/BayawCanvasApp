@@ -49,11 +49,11 @@ export class App extends kola.App<{container:PIXI.Container}> {
         this.sprite.anchor.x = 0.5;
         this.sprite.anchor.y = 0.5;
 
-        this.sprite.position.x = 100;
+        this.sprite.position.x = -100;
         this.sprite.position.y = this.gameModel.height * 0.65;
 
-        this.sprite.scale.x = 0;
-        this.sprite.scale.y = 0;
+        this.sprite.scale.x = 1.2;
+        this.sprite.scale.y = 1.2;
 
         this.container.addChild(this.sprite);
         this.listeners.push(this.kontext.getSignal('stage.render').listen(this.updateView, this));
@@ -65,7 +65,7 @@ export class App extends kola.App<{container:PIXI.Container}> {
         var payload = data.payload;
         
         var goDown = function(){
-            //TweenLite.to(this.sprite.position, 1, { delay: 1, y: this.gameModel.floorHeight + 100, onComplete: walk.bind(this) });
+            TweenMax.to(this.sprite.position, 1, { delay: 1, y: this.gameModel.floorHeight + 100, onComplete: walk.bind(this) });
         }
 
         var walk = function(){
@@ -75,15 +75,15 @@ export class App extends kola.App<{container:PIXI.Container}> {
         if (this.gameModel.currentState == models.GameState.PLAYING){
             if (payload.y < this.gameModel.floorHeight) {
                 this.sprite.textures = this.jumpTextures;
-                //TweenLite.to(this.sprite.position, 1, { x: payload.x, y: this.gameModel.floorHeight - 150, onComplete: goDown.bind(this) });
+                
+                TweenMax.to(this.sprite.position, 1, { x: payload.x, y: this.gameModel.floorHeight - 150, onComplete: goDown.bind(this) });
+
+
             }else{
                 this.sprite.textures = this.walkTextures;
-                //TweenMax.to(this.sprite.position, 1, { x: payload.x, y: payload.y });
+                TweenMax.to(this.sprite.position, 1, { x: payload.x, y: payload.y });
             }
 
-        }else{
-            this.sprite.position.x = 100;
-            this.sprite.position.y = this.gameModel.height * 0.65;
         }
     }
 
@@ -91,11 +91,11 @@ export class App extends kola.App<{container:PIXI.Container}> {
         switch(state){
             case models.GameState.PLAYING:
                 this.sprite.play();
-                //TweenLite.to(this.sprite.scale, 1, { x: 1.2, y: 1.2 });
+                TweenMax.to(this.sprite.position, 1, { x: 100});
                 break;
             case models.GameState.INTRO:
                 this.sprite.stop();
-                //TweenMax.to(this.sprite.scale, 1, { x: 0, y: 0 });
+                TweenMax.to(this.sprite.position, 1, { x: -100 });
                 break;
             default:
                 break;
