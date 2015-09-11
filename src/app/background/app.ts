@@ -20,8 +20,9 @@ export class App extends kola.App<{container:PIXI.Container}> {
     fg;
     mrt;
     gg;
+    countingText;
 
-    listeners: signals.Listener<any>[] = [];
+      listeners: signals.Listener<any>[] = [];
     container:PIXI.Container;
     gameModel: models.GameModel;
 
@@ -39,6 +40,15 @@ export class App extends kola.App<{container:PIXI.Container}> {
         this.gg = new PIXI.extras.TilingSprite(texture3, this.gameModel.width, this.gameModel.groundHeight);
         this.mrt = new PIXI.Sprite(texture4);
 
+        var voteBox = new PIXI.Sprite(PIXI.Texture.fromImage('images/ballotBox.png');)
+        voteBox.position.x = 30;
+        voteBox.position.y = 45;
+        
+        this.countingText = new PIXI.Text('x 0', { font: '26px Impact', fill: '#c0c41d', align: 'center', stroke: '#ffffff', strokeThickness: 3 });
+        
+        this.countingText.position.x = 83;
+        this.countingText.position.y = 55;
+
         this.bg.position.x = 0;
         this.bg.position.y = 0;
 
@@ -55,6 +65,8 @@ export class App extends kola.App<{container:PIXI.Container}> {
         this.container.addChild(this.fg);
         this.container.addChild(this.mrt);
         this.container.addChild(this.gg);
+        this.container.addChild(this.countingText);
+        this.container.addChild(voteBox);
 
         TweenMax.to(this.mrt.position, 8, { delay: 3, x: -10000, repeat:-1});
 
