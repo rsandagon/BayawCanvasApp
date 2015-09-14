@@ -40,7 +40,7 @@ export class App extends kola.App<{container:PIXI.Container}> {
         this.gg = new PIXI.extras.TilingSprite(texture3, this.gameModel.width, this.gameModel.groundHeight);
         this.mrt = new PIXI.Sprite(texture4);
 
-        var voteBox = new PIXI.Sprite(PIXI.Texture.fromImage('images/ballotBox.png');)
+        var voteBox = new PIXI.Sprite(PIXI.Texture.fromImage('images/ballotBox.png'));
         voteBox.position.x = 30;
         voteBox.position.y = 45;
         

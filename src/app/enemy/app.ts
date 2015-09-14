@@ -6,6 +6,7 @@ import signals = require('kola-signals');
 import hooks = require('kola-hooks');
 import PIXI = require('pixi.js');
 import models = require('../models');
+import bayawApp = require('../bayaw/app');
 
 export interface Kontext extends kola.Kontext {
     setSignal<T>(name: string, hook?: kola.Hook<T>): kola.SignalHook<T>;
@@ -48,6 +49,16 @@ export class App extends kola.App<{container:PIXI.Container}> {
 
             if (this.floodMC.position.x < -150){
                this.floodMC.position.x = this.gameModel.width + 50;
+            }
+
+            var bayaw = <bayawApp.App> this.kontext.getInstance('player.bayaw');
+
+            if(this.isIntersecting(bayaw.sprite,this.floodMC)){
+                //refactor throw signal
+                bayaw.actHurt();
+            }else{
+
+                bayaw.actOk();
             }
         }
     }

@@ -25,6 +25,9 @@ export class App extends kola.App<{container:PIXI.Container}> {
     walkTextures: PIXI.Texture[];
     jumpTextures: PIXI.Texture[];
 
+    isHurt:boolean;
+    hurtTl:TweenMax;
+
     onStart(): void {
         var i;
         this.walkTextures = [];
@@ -64,10 +67,6 @@ export class App extends kola.App<{container:PIXI.Container}> {
     onStageClicked(data):void{
         var payload = data.payload;
         
-        var goDown = function(){
-            TweenMax.to(this.sprite.position, 1, { delay: 1, y: this.gameModel.floorHeight + 100, onComplete: walk.bind(this) });
-        }
-
         var walk = function(){
             this.sprite.textures = this.walkTextures;
         }
@@ -75,15 +74,35 @@ export class App extends kola.App<{container:PIXI.Container}> {
         if (this.gameModel.currentState == models.GameState.PLAYING){
             if (payload.y < this.gameModel.floorHeight) {
                 this.sprite.textures = this.jumpTextures;
-                
-                TweenMax.to(this.sprite.position, 1, { x: payload.x, y: this.gameModel.floorHeight - 150, onComplete: goDown.bind(this) });
-
-
+                var tl = new TimelineLite();
+                tl.to(this.sprite.position, 1, { x: payload.x, y: this.gameModel.floorHeight - 150});
+                tl.to(this.sprite.position, 1, { delay: 1, y: this.gameModel.floorHeight + 100, onComplete: walk.bind(this)});
+                tl.play();
             }else{
                 this.sprite.textures = this.walkTextures;
                 TweenMax.to(this.sprite.position, 1, { x: payload.x, y: payload.y });
             }
 
+        }
+    }
+
+    actHurt():void{
+        if(!this.isHurt){
+            this.isHurt = true;
+            this.sprite.textures = this.jumpTextures;
+            this.hurtTl = TweenMax.to(this.sprite, 0.1, { alpha:.2, repeat:-1, yoyo:true });
+            this.sprite.gotoAndStop(3);
+        }
+    }
+
+    actOk():void{
+        if(this.isHurt){
+            this.isHurt = false;
+            this.hurtTl.pause();
+
+            this.sprite.alpha = 1;
+            this.sprite.textures = this.walkTextures;
+            this.sprite.play();
         }
     }
 
@@ -106,6 +125,7 @@ export class App extends kola.App<{container:PIXI.Container}> {
     }
 
     onStop(): void {
+        this.hurtTl = undefined;
         this.container.removeChild(this.sprite);
         this.listeners.forEach((listener: signals.Listener<any>) => {listener.unlisten()});
     }
