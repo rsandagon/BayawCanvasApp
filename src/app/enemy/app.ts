@@ -54,7 +54,6 @@ export class App extends kola.App<{container:PIXI.Container}> {
             var bayaw = <bayawApp.App> this.kontext.getInstance('player.bayaw');
 
             if(this.isIntersecting(bayaw.sprite,this.floodMC)){
-                //refactor throw signal
                 bayaw.actHurt();
             }else{
 

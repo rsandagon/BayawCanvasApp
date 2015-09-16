@@ -12,8 +12,10 @@ export class GameModel {
     groundHeight: number;
     currentState: string;
     floorHeight: number;
+    score: number;
 
     onStateChange: signals.Dispatcher<string> = new signals.Dispatcher();
+    onScoreChange: signals.Dispatcher<string> = new signals.Dispatcher();
 
     constructor() {
         this.width = 600;
@@ -22,13 +24,17 @@ export class GameModel {
         this.groundHeight = 350;
         this.floorHeight = 150;
         this.setCurrentState(GameState.INTRO);
+        this.score = 0;
     }
 
     setCurrentState(value:string){
-        console.log("state >" + value);
-
         this.currentState = value;
         this.onStateChange.dispatch(value);
+    }
+
+    setScore(value: number) {
+        this.score = value;
+        this.onScoreChange.dispatch();
     }
 }
 

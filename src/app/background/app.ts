@@ -22,7 +22,8 @@ export class App extends kola.App<{container:PIXI.Container}> {
     gg;
     countingText;
 
-      listeners: signals.Listener<any>[] = [];
+    listeners: signals.Listener<any>[] = [];
+    scoreChangeListener: signals.Listener<string>;
     container:PIXI.Container;
     gameModel: models.GameModel;
 
@@ -42,12 +43,12 @@ export class App extends kola.App<{container:PIXI.Container}> {
 
         var voteBox = new PIXI.Sprite(PIXI.Texture.fromImage('images/ballotBox.png'));
         voteBox.position.x = 30;
-        voteBox.position.y = 45;
+        voteBox.position.y = 15;
         
-        this.countingText = new PIXI.Text('x 0', { font: '26px Impact', fill: '#c0c41d', align: 'center', stroke: '#ffffff', strokeThickness: 3 });
+        this.countingText = new PIXI.Text('0', { font: '26px Impact', fill: '#c0c41d', align: 'center', stroke: '#ffffff', strokeThickness: 3 });
         
         this.countingText.position.x = 83;
-        this.countingText.position.y = 55;
+        this.countingText.position.y = 25;
 
         this.bg.position.x = 0;
         this.bg.position.y = 0;
@@ -71,6 +72,7 @@ export class App extends kola.App<{container:PIXI.Container}> {
         TweenMax.to(this.mrt.position, 8, { delay: 3, x: -10000, repeat:-1});
 
         this.listeners.push(this.kontext.getSignal('stage.render').listen(this.updateView, this));
+        this.scoreChangeListener = this.gameModel.onScoreChange.listen(this.scoreChanged, this);
     }
 
     updateView():void{
@@ -79,6 +81,10 @@ export class App extends kola.App<{container:PIXI.Container}> {
             this.fg.tilePosition.x -= models.GameSpeed.FG_SPEED;
             this.gg.tilePosition.x -= models.GameSpeed.GROUND_SPEED;
         }
+    }
+
+    scoreChanged():void{
+        this.countingText.text = this.gameModel.score;
     }
 
     onStop(): void {

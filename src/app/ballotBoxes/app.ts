@@ -54,7 +54,7 @@ export class App extends kola.App<{container:PIXI.Container}> {
 
                 if(this.isIntersecting(item,this.bayaw.sprite)){
                     item.position.x = -150
-                    //TweenMax.to(item.position, 1, { y : (ballotBox.position.y + 20) , repeat:-1, yoyo:true});
+                    this.gameModel.setScore(this.gameModel.score + 5);
                 }
 
                 if (item.position.x < -150){
