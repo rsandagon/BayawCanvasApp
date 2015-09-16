@@ -24,6 +24,7 @@ export class App extends kola.App<{container:PIXI.Container}> {
     stateChangeListener:signals.Listener<string>;
     walkTextures: PIXI.Texture[];
     jumpTextures: PIXI.Texture[];
+    drownTextures: PIXI.Texture[];
 
     isHurt:boolean;
     hurtTl:TweenMax;
@@ -32,8 +33,9 @@ export class App extends kola.App<{container:PIXI.Container}> {
         var i;
         this.walkTextures = [];
         this.jumpTextures = [];
+        this.drownTextures = []
 
-        for (i = 0; i < 6; i++) {
+        for (i = 0; i < 5; i++) {
             var texture = PIXI.Texture.fromImage('images/BayawWalkcycle_' + (i + 1) + '.png');
             this.walkTextures.push(texture);
         }
@@ -43,14 +45,16 @@ export class App extends kola.App<{container:PIXI.Container}> {
             this.jumpTextures.push(texture);
         }
 
+        for (i = 0; i < 2; i++) {
+            var texture = PIXI.Texture.fromImage('images/DrownCycle_' + (i + 1) + '.png');
+            this.drownTextures.push(texture);
+        }
+
         this.gameModel = <models.GameModel> this.kontext.getInstance('game.model');
 
         this.container = this.opts.container;
         this.sprite = new PIXI.extras.MovieClip(this.walkTextures);
         this.sprite.animationSpeed = 0.15;
-
-        this.sprite.anchor.x = 0.5;
-        this.sprite.anchor.y = 0.5;
 
         this.sprite.position.x = -100;
         this.sprite.position.y = this.gameModel.height * 0.65;
@@ -66,19 +70,23 @@ export class App extends kola.App<{container:PIXI.Container}> {
 
     onStageClicked(data):void{
         var payload = data.payload;
-        
+        //var tl = new TimelineLite();
         var walk = function(){
             this.sprite.textures = this.walkTextures;
         }
 
+        if (this.isHurt)
+            return;
+
         if (this.gameModel.currentState == models.GameState.PLAYING){
             if (payload.y < this.gameModel.floorHeight) {
                 this.sprite.textures = this.jumpTextures;
-                var tl = new TimelineLite();
-                tl.to(this.sprite.position, 1, { x: payload.x, y: this.gameModel.floorHeight - 150});
+                TweenMax.to(this.sprite.position, 1, { x: payload.x, y: payload.y });
+                /*tl.to(this.sprite.position, 1, { x: payload.x, y: payload.y });
                 tl.to(this.sprite.position, 1, { delay: 1, y: this.gameModel.floorHeight + 100, onComplete: walk.bind(this)});
-                tl.play();
+                tl.play();*/
             }else{
+                //tl.stop();
                 this.sprite.textures = this.walkTextures;
                 TweenMax.to(this.sprite.position, 1, { x: payload.x, y: payload.y });
             }
@@ -89,9 +97,8 @@ export class App extends kola.App<{container:PIXI.Container}> {
     actHurt():void{
         if(!this.isHurt){
             this.isHurt = true;
-            this.sprite.textures = this.jumpTextures;
+            this.sprite.textures = this.drownTextures;
             this.hurtTl = TweenMax.to(this.sprite, 0.1, { alpha:.2, repeat:-1, yoyo:true });
-            this.sprite.gotoAndStop(3);
         }
     }
 

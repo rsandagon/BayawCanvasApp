@@ -20,7 +20,7 @@ export class GameModel {
         this.height = 450;
         this.foregroundHeight = 220;
         this.groundHeight = 350;
-        this.floorHeight = 250;
+        this.floorHeight = 150;
         this.setCurrentState(GameState.INTRO);
     }
 
