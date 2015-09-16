@@ -54,7 +54,7 @@ export class App extends kola.App<{container:PIXI.Container}> {
 
                 if(this.isIntersecting(item,this.bayaw.sprite)){
                     item.position.x = -150
-                    this.gameModel.setScore(this.gameModel.score + 5);
+                    this.gameModel.setScore(this.gameModel.score + 1);
                 }
 
                 if (item.position.x < -150){

@@ -96,7 +96,8 @@ export class App extends kola.App<{container:PIXI.Container}> {
 
     actHurt():void{
         if(!this.isHurt){
-            this.gameModel.setScore(this.gameModel.score - 1);
+            var score = ((this.gameModel.score - 1) > 0) ? (this.gameModel.score - 1)  : 0;
+            this.gameModel.setScore(score);
             this.isHurt = true;
             this.sprite.textures = this.drownTextures;
             this.hurtTl = TweenMax.to(this.sprite, 0.1, { alpha:.2, repeat:-1, yoyo:true });
