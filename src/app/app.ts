@@ -60,6 +60,9 @@ export class App extends kola.App<HTMLElement> {
         requestAnimationFrame(this.animate.bind(this));
         this.renderer.render(this.stage);
         this.kontext.getSignal("stage.render").dispatch();
+
+        this.renderer.view.clientHeight = Math.random()*400;
+        this.renderer.view.clientWidth = Math.random()*700;
     }
 
     onStart(): void {
