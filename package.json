@@ -30,11 +30,10 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "repository": {
-    "url": "https://github.com/staticfunction/kola-starter.git",
+    "url": "https://github.com/rsandagon/BayawCanvasApp.git",
     "type": "git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start":"gulp run",
     "build":"gulp build"
   },
