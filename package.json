@@ -2,7 +2,7 @@
   "name": "bayaw-canvas-app",
   "version": "1.0.0",
   "description": "Wag ganyan tohl!",
-  "main": "main/index.html",
+  "main": "src/index.html",
   "directories": {
     "test": "test"
   },
