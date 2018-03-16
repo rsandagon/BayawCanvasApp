@@ -1,6 +1,8 @@
 # WAG GANYAN TOHL!
 HTML5 game in canvas support.
 
+[![Edit bayaw-canvas-app](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/rsandagon/BayawCanvasApp/tree/master/)
+
 ## Prerequisites
 * [NodeJS](https://nodejs.org)
 * NPM (comes bundled with NodeJS)
