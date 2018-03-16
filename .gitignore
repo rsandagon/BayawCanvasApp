@@ -9,4 +9,4 @@ npm-debug.log
 /build
 /localize
 /bin-debug
-/bundle
+/dist

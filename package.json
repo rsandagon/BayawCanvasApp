@@ -1,7 +1,7 @@
 {
-  "name": "kola-starter",
+  "name": "bayaw-canvas-app",
   "version": "1.0.0",
-  "description": "Boilerplate code to allow you to code with Kola in no time!",
+  "description": "Wag ganyan tohl!",
   "main": "dist/index.html",
   "directories": {
     "test": "test"
@@ -35,7 +35,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"gulp run"
+    "start":"gulp run",
+    "build":"gulp build"
   },
   "author": "",
   "license": "ISC"

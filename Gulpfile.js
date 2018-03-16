@@ -50,18 +50,18 @@ gulp.task('bundle', ['build'], function() {
             .pipe(source('app.js'))
             .pipe(buffer())
             .pipe(gulpif(options.debug !== true, uglify()))
-            .pipe(gulp.dest('bundle/app')),
+            .pipe(gulp.dest('dist/app')),
         gulp.src(['src/**', '!src/app/**'])
-            .pipe(gulp.dest('bundle'))
+            .pipe(gulp.dest('dist'))
     ])
 })
 
 gulp.task('run', ['bundle'], function() {
-    gulp.src('bundle')
+    gulp.src('dist')
         .pipe(webserver({
             "livereload": true,
             host:"0.0.0.0",
-            port: 8000
+            port: 3000
         }))
 })
 
@@ -75,5 +75,5 @@ gulp.task('release', ['build'], function() {
 
 
 gulp.task('auto', ['run'], function() {
-    gulp.watch(['src/**'], ['bundle']);
+    gulp.watch(['src/**'], ['dist']);
 })
